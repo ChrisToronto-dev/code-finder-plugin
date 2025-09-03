@@ -1,5 +1,4 @@
 <?php
-
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die;
@@ -8,7 +7,7 @@ if (!defined('WPINC')) {
 class Code_Finder_Code_Searcher {
 
     /**
-     * Searches for a pattern within a given list of files, using a specific search type.
+     * Searches for a pattern within a given list of files and custom CSS, using a specific search type.
      *
      * @param string $term The term to search for.
      * @param array $files A list of absolute file paths to search within.
@@ -21,23 +20,48 @@ class Code_Finder_Code_Searcher {
 
         switch ($type) {
             case 'css_class':
-                // Re-ordered character class in lookahead to avoid escaping issues with ']'
-                $regex = "/[.'"]" . $safe_term . "(?=[]\s.'",:]|$)/i";
+                // Use multiple patterns to avoid complex character classes
+                $patterns = [
+                    '/\.' . $safe_term . '(?![-_a-zA-Z0-9])/i',  // .classname
+                    '/#' . $safe_term . '(?![-_a-zA-Z0-9])/i',    // #idname
+                    '/class\s*=\s*["\'][^"\']*\b' . $safe_term . '\b[^"\']*["\"]/i' // class="...classname..."
+                ];
                 break;
+                
             case 'js_function':
-                $regex = '/(?:function\s+|const\s+)' . $safe_term . '\s*(?:\(|\=|:)/i';
+                $patterns = ['/(?:function\s+|const\s+|let\s+|var\s+)' . $safe_term . '\s*(?:\(|=|:)/i'];
                 break;
+                
             case 'js_variable':
-                $regex = '/(?:var|let|const)\s+' . $safe_term . '\s*=/i';
+                $patterns = ['/(?:var|let|const)\s+' . $safe_term . '(?:\s*=|\s*;|\s*,)/i'];
                 break;
+                
             case 'html_tag':
-                $regex = '/<\/?' . $safe_term . '[\s>]/i';
+                $patterns = ['/<\/?(' . $safe_term . ')(?:\s[^>]*)?>/i'];
                 break;
+                
             case 'any':
             default:
-                // Case-insensitive search for any text
-                $regex = '/' . $safe_term . '/i';
+                $patterns = ['/' . $safe_term . '/i'];
                 break;
+        }
+
+        // Search in Customizer's Additional CSS
+        $custom_css = wp_get_custom_css();
+        if (!empty($custom_css)) {
+            $lines = explode("\n", $custom_css);
+            foreach ($lines as $line_number => $line) {
+                foreach ($patterns as $pattern) {
+                    if (preg_match($pattern, $line)) {
+                        $results[] = [
+                            'file'         => __('Appearance > Customize > Additional CSS', 'code-finder'),
+                            'line_number'  => $line_number + 1,
+                            'line_content' => rtrim($line),
+                        ];
+                        break; // Found match, no need to check other patterns for this line
+                    }
+                }
+            }
         }
 
         foreach ($files as $file) {
@@ -49,12 +73,15 @@ class Code_Finder_Code_Searcher {
             if ($handle) {
                 $line_number = 1;
                 while (($line = fgets($handle)) !== false) {
-                    if (preg_match($regex, $line)) {
-                        $results[] = [
-                            'file'         => $file,
-                            'line_number'  => $line_number,
-                            'line_content' => rtrim($line),
-                        ];
+                    foreach ($patterns as $pattern) {
+                        if (preg_match($pattern, $line)) {
+                            $results[] = [
+                                'file'         => $file,
+                                'line_number'  => $line_number,
+                                'line_content' => rtrim($line),
+                            ];
+                            break; // Found match, no need to check other patterns for this line
+                        }
                     }
                     $line_number++;
                 }

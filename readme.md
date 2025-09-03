@@ -1,9 +1,9 @@
 === Code Finder ===
-Contributors: Gemini
+Contributors: Chris Lee
 Tags: search, code, css, javascript, developer, debug, find
 Requires at least: 5.0
 Tested up to: 6.5
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,11 +15,11 @@ Code Finder is an essential tool for WordPress developers and site administrator
 
 **Key Features:**
 
-*   **Precise Searches**: Search for plain text or use the built-in search types for more accurate results when looking for CSS classes, JavaScript functions/variables, or HTML tags.
-*   **AJAX-Powered Interface**: The search is performed in the background without reloading the page, providing a fast and smooth user experience.
-*   **Syntax Highlighting**: Search results are presented with syntax highlighting, making it easy to understand the context of the found code.
-*   **Performance Optimized**: A built-in caching system stores recent search results, dramatically speeding up repeated searches and reducing server load.
-*   **Targeted Search**: Choose to search within themes, plugins, uploads, or any combination.
+- **Precise Searches**: Search for plain text or use the built-in search types for more accurate results when looking for CSS classes, JavaScript functions/variables, or HTML tags.
+- **AJAX-Powered Interface**: The search is performed in the background without reloading the page, providing a fast and smooth user experience.
+- **Syntax Highlighting**: Search results are presented with syntax highlighting, making it easy to understand the context of the found code.
+- **Performance Optimized**: A built-in caching system stores recent search results, dramatically speeding up repeated searches and reducing server load.
+- **Targeted Search**: Choose to search within themes, plugins, uploads, or any combination.
 
 This plugin is designed to be a lightweight and secure developer utility that lives in your admin dashboard.
 
@@ -42,10 +42,11 @@ No. The plugin's code only runs in the admin area when a logged-in administrator
 = What kind of code can I search for? =
 
 You can perform a general text search, or you can use the "Search Type" dropdown for a more precise search for:
-*   CSS Classes
-*   JavaScript Functions
-*   JavaScript Variables
-*   HTML Tags
+
+- CSS Classes
+- JavaScript Functions
+- JavaScript Variables
+- HTML Tags
 
 = Are the search results cached? =
 
@@ -59,4 +60,5 @@ Yes. To ensure fast performance, identical searches are cached for one hour. Thi
 == Changelog ==
 
 = 1.0.0 =
-*   Initial release.
+
+- Initial release.

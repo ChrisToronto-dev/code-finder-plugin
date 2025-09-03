@@ -12,7 +12,7 @@ class Code_Finder_File_Scanner {
      *
      * @var array
      */
-    private $allowed_extensions = ['php', 'css', 'js', 'html'];
+    private $allowed_extensions = ['php', 'css', 'js', 'html', 'scss'];
 
     /**
      * Scans specified directories for files with allowed extensions.
