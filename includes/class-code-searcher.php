@@ -22,9 +22,9 @@ class Code_Finder_Code_Searcher {
             case 'css_class':
                 // Use multiple patterns to avoid complex character classes
                 $patterns = [
-                    '/\.' . $safe_term . '(?![-_a-zA-Z0-9])/i',  // .classname
-                    '/#' . $safe_term . '(?![-_a-zA-Z0-9])/i',    // #idname
-                    '/class\s*=\s*["\'][^"\']*\b' . $safe_term . '\b[^"\']*["\"]/i' // class="...classname..."
+                    '/\.' . $safe_term . '(?=[\s{\.:\[,>]|$)/i',  // .classname
+                    '/#' . $safe_term . '(?=[\s{\.:\[,>]|$)/i',    // #idname
+                    '/class\s*=\s*[""][^"\\]*\b' . $safe_term . '\b[^"\\]*["\\]/i' // class="...classname..."
                 ];
                 break;
                 
